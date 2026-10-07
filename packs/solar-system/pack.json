@@ -1,0 +1,247 @@
+{
+  "schemaVersion": 1,
+  "id": "solar-system",
+  "title": "Out of the Solar System",
+  "description": "Walk from the surface of the Sun to Pluto. Eleven stops, scaled to whatever distance you choose — and a first-hand lesson in how much of the solar system is empty space.",
+  "domainType": "astronomy",
+  "locale": "en",
+  "version": "1.0.0",
+  "coverImage": "images/cover.webp",
+  "scalingModel": "fit-to-distance",
+  "realUnitLabel": "million km",
+  "suggestedDistancesM": [
+    2000,
+    5000,
+    10000
+  ],
+  "media": [
+    {
+      "ref": "images/cover.webp",
+      "type": "image",
+      "thumbnailRef": "images/cover.thumb.webp",
+      "caption": "The Sun and the orbits of the planets, seen at an angle."
+    },
+    {
+      "ref": "images/sun.webp",
+      "type": "image",
+      "thumbnailRef": "images/sun.thumb.webp",
+      "caption": "The Sun's churning surface, marked by darker sunspots."
+    },
+    {
+      "ref": "images/mercury.webp",
+      "type": "image",
+      "thumbnailRef": "images/mercury.thumb.webp",
+      "caption": "Mercury's grey, heavily cratered surface."
+    },
+    {
+      "ref": "images/venus.webp",
+      "type": "image",
+      "thumbnailRef": "images/venus.thumb.webp",
+      "caption": "Venus wrapped in featureless pale cloud."
+    },
+    {
+      "ref": "images/earth.webp",
+      "type": "image",
+      "thumbnailRef": "images/earth.thumb.webp",
+      "caption": "Earth as a blue crescent, with weather systems over the ocean."
+    },
+    {
+      "ref": "images/mars.webp",
+      "type": "image",
+      "thumbnailRef": "images/mars.thumb.webp",
+      "caption": "The rust-red disc of Mars, with a bright polar cap."
+    },
+    {
+      "ref": "images/asteroid-belt.webp",
+      "type": "image",
+      "thumbnailRef": "images/asteroid-belt.thumb.webp",
+      "caption": "The dwarf planet Ceres, the largest body in the asteroid belt."
+    },
+    {
+      "ref": "images/jupiter.webp",
+      "type": "image",
+      "thumbnailRef": "images/jupiter.thumb.webp",
+      "caption": "Jupiter's banded clouds and the Great Red Spot."
+    },
+    {
+      "ref": "images/saturn.webp",
+      "type": "image",
+      "thumbnailRef": "images/saturn.thumb.webp",
+      "caption": "Saturn and its rings, casting a shadow across the planet."
+    },
+    {
+      "ref": "images/uranus.webp",
+      "type": "image",
+      "thumbnailRef": "images/uranus.thumb.webp",
+      "caption": "Uranus as a near-featureless pale blue-green disc."
+    },
+    {
+      "ref": "images/neptune.webp",
+      "type": "image",
+      "thumbnailRef": "images/neptune.thumb.webp",
+      "caption": "Deep blue Neptune, with faint white cloud streaks."
+    },
+    {
+      "ref": "images/pluto.webp",
+      "type": "image",
+      "thumbnailRef": "images/pluto.thumb.webp",
+      "caption": "Pluto's pale heart-shaped plain of frozen nitrogen."
+    }
+  ],
+  "milestones": [
+    {
+      "id": "sun",
+      "realValue": 0,
+      "position": 0,
+      "title": "The Sun",
+      "body": "You begin at the surface of the Sun, which holds about 99.8% of all the mass in the solar system. Its visible surface burns at roughly 5,500 °C, and the light leaving it now will take 8 minutes and 20 seconds to reach Earth. Everything ahead of you orbits this one object.",
+      "mediaRefs": [
+        "images/sun.webp"
+      ],
+      "notification": {
+        "title": "Leaving the Sun",
+        "body": "Your journey starts at the surface of the Sun. Pluto is 5,906 million km ahead."
+      }
+    },
+    {
+      "id": "mercury",
+      "realValue": 57.9,
+      "position": 0.009803,
+      "title": "Mercury",
+      "body": "The smallest planet and the closest to the Sun, orbiting it once every 88 days. With almost no atmosphere to hold heat, its day side reaches about 430 °C while its night side falls to around −180 °C. Its cratered surface has changed little in billions of years.",
+      "mediaRefs": [
+        "images/mercury.webp"
+      ],
+      "notification": {
+        "title": "Mercury",
+        "body": "57.9 million km from the Sun. The smallest planet, and the fastest."
+      }
+    },
+    {
+      "id": "venus",
+      "realValue": 108.2,
+      "position": 0.018319,
+      "title": "Venus",
+      "body": "Nearly Earth's twin in size, and nothing like it otherwise. A dense carbon dioxide atmosphere presses down at about ninety times Earth's surface pressure and traps enough heat to hold the surface near 465 °C — hotter than Mercury, despite being further out.",
+      "mediaRefs": [
+        "images/venus.webp"
+      ],
+      "notification": {
+        "title": "Venus",
+        "body": "108.2 million km from the Sun. The hottest surface of any planet."
+      }
+    },
+    {
+      "id": "earth",
+      "realValue": 149.6,
+      "position": 0.025328,
+      "title": "Earth",
+      "body": "Home, and the only place known to carry life. Liquid water covers about 71% of the surface, and a magnetic field deflects the solar wind that stripped Mars bare. This distance from the Sun — 149.6 million km — is the yardstick astronomers call one astronomical unit.",
+      "mediaRefs": [
+        "images/earth.webp"
+      ],
+      "notification": {
+        "title": "Earth",
+        "body": "149.6 million km from the Sun. You are walking past home."
+      }
+    },
+    {
+      "id": "mars",
+      "realValue": 227.9,
+      "position": 0.038585,
+      "title": "Mars",
+      "body": "A cold desert with a thin carbon dioxide atmosphere, two small moons, and the largest volcano in the solar system: Olympus Mons, some 22 km high. Dry river channels and clay minerals show that water once ran across this surface.",
+      "mediaRefs": [
+        "images/mars.webp"
+      ],
+      "notification": {
+        "title": "Mars",
+        "body": "227.9 million km from the Sun. The last of the rocky planets."
+      }
+    },
+    {
+      "id": "asteroid-belt",
+      "realValue": 413.7,
+      "position": 0.070043,
+      "title": "The Asteroid Belt",
+      "body": "A broad, mostly empty band of rock and metal between Mars and Jupiter. Its largest body, the dwarf planet Ceres, is about 940 km across; everything in the belt together adds up to only a few percent of the Moon's mass. Spacecraft pass straight through it without needing to dodge anything.",
+      "mediaRefs": [
+        "images/asteroid-belt.webp"
+      ],
+      "notification": {
+        "title": "The Asteroid Belt",
+        "body": "413.7 million km from the Sun. Emptier than it looks in films."
+      }
+    },
+    {
+      "id": "jupiter",
+      "realValue": 778.5,
+      "position": 0.131806,
+      "title": "Jupiter",
+      "body": "More massive than every other planet combined, with more than ninety known moons. The Great Red Spot is a storm wider than Earth that has been turning for at least a century and a half. Jupiter has no solid surface — the banded clouds simply give way to hydrogen compressed until it behaves like a metal.",
+      "mediaRefs": [
+        "images/jupiter.webp"
+      ],
+      "notification": {
+        "title": "Jupiter",
+        "body": "778.5 million km from the Sun. You are now in the outer solar system."
+      }
+    },
+    {
+      "id": "saturn",
+      "realValue": 1432,
+      "position": 0.242449,
+      "title": "Saturn",
+      "body": "The rings are almost entirely water ice, in pieces ranging from dust grains to boulders the size of a house, spread across a span wider than the Earth–Moon distance but often only tens of metres thick. Saturn itself is less dense than water.",
+      "mediaRefs": [
+        "images/saturn.webp"
+      ],
+      "notification": {
+        "title": "Saturn",
+        "body": "1,432 million km from the Sun. Sunlight here is about 1% as bright as on Earth."
+      }
+    },
+    {
+      "id": "uranus",
+      "realValue": 2867,
+      "position": 0.485406,
+      "title": "Uranus",
+      "body": "An ice giant tipped on its side, rotating at an axial tilt of about 98 degrees, so its poles take turns facing the Sun through a 42-year summer and a 42-year winter. Methane in the upper atmosphere absorbs red light and leaves the planet a flat blue-green.",
+      "mediaRefs": [
+        "images/uranus.webp"
+      ],
+      "notification": {
+        "title": "Uranus",
+        "body": "2,867 million km from the Sun. Half your walk is behind you."
+      }
+    },
+    {
+      "id": "neptune",
+      "realValue": 4515,
+      "position": 0.764425,
+      "title": "Neptune",
+      "body": "Found in 1846 by working backwards from irregularities in Uranus's orbit — predicted on paper before anyone saw it. The fastest winds in the solar system tear through its atmosphere at up to 2,000 km/h, driven by an internal heat source rather than by sunlight, which arrives here about 900 times fainter than on Earth.",
+      "mediaRefs": [
+        "images/neptune.webp"
+      ],
+      "notification": {
+        "title": "Neptune",
+        "body": "4,515 million km from the Sun. The last planet."
+      }
+    },
+    {
+      "id": "pluto",
+      "realValue": 5906.4,
+      "position": 1,
+      "title": "Pluto",
+      "body": "Reclassified as a dwarf planet in 2006, and still largely unknown until New Horizons flew past in July 2015 and found mountains of water ice and a vast, smooth glacier of frozen nitrogen. One Pluto year lasts 248 Earth years. Look back: the Sun is now just the brightest star in the sky.",
+      "mediaRefs": [
+        "images/pluto.webp"
+      ],
+      "notification": {
+        "title": "Pluto",
+        "body": "5,906 million km from the Sun. You have crossed the solar system."
+      }
+    }
+  ]
+}
