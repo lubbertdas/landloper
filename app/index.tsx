@@ -1,15 +1,14 @@
-// Stage 4 demo: a mock walk driving the real engine. Replaced at Stage 6.
+// Stage 4/2a demo: a mock walk over bundled content. Replaced at Stage 6.
 
 import { Stack } from "expo-router";
 import { useEffect } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
-import type { AuthoredContentPack, ContentPack } from "../src/content";
 import { journeyController, setSimulationSpeed, useJourney } from "../src/ui/state/journey";
+import { packSource } from "../src/ui/state/packs";
 import { theme } from "../src/ui/theme";
 
-// Media dimensions arrive with the Stage 2a pipeline; the demo uses text only.
-const pack = require("../packs/solar-system/pack.json") as AuthoredContentPack as ContentPack;
+const pack = packSource.loadPackSync("solar-system");
 
 export default function Home() {
   const { current } = useJourney();
@@ -45,6 +44,13 @@ export default function Home() {
             {Math.round(current.state.cumulativeDistanceM)} m
           </Text>
           <Text style={styles.body}>Status: {status}</Text>
+          {latest?.mediaRefs[0] !== undefined && (
+            <Image
+              source={packSource.resolveMedia(pack.id, latest.mediaRefs[0])}
+              style={styles.image}
+              resizeMode="contain"
+            />
+          )}
           <Text style={styles.milestone}>{latest?.title ?? "—"}</Text>
           {latest && <Text style={styles.body}>{latest.notification.body}</Text>}
         </View>
@@ -90,6 +96,10 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     fontSize: theme.font.display,
     fontWeight: theme.weight.bold,
+  },
+  image: {
+    width: "100%",
+    aspectRatio: 4 / 3,
   },
   milestone: {
     color: theme.colors.accent,

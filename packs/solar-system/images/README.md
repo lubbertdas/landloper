@@ -1,20 +1,23 @@
 # Images for the solar-system pack
 
-**These files do not exist yet.** `pack.json` declares them so that the
-Stage 1 contract is exercised end to end, but producing them is Stage 2a's
-media pipeline, which generates resized WebP images plus thumbnails at fixed
-dimensions from source files.
+**Everything in this folder is generated** by the Stage 2a media pipeline
+(`npm run media`) from originals in `../source/`. Never edit or export files
+here by hand.
 
-Consequences until that runs:
+**Current images are placeholders**: a coloured disc with the milestone's
+name, generated because no original exists yet in `source/`. Their
+`attribution` in `pack.json` starts with `PLACEHOLDER`, which
+`npm run validate -- --release` rejects. Placeholders are fine for
+development builds only.
 
-- The Stage 2a validator's "every `mediaRef` resolves to a file" check will
-  fail for this pack. That is expected, not a regression.
-- `width`, `height` and `bytes` are absent from every entry in the `media`
-  table. The pipeline writes them, the same way the validator writes
-  `position`. They are optional in the schema for exactly this reason.
-- `attribution` is absent. Captions are authored (they double as alt text
-  for TalkBack), but a credit can only be written once a specific image is
-  chosen.
+## Replacing a placeholder
+
+1. Put the original in `../source/` with the same base name as the ref,
+   e.g. `source/earth.jpg` for `images/earth.webp`. Delete the placeholder
+   `source/earth.png`.
+2. In `pack.json`, set that media entry's `attribution` to the credit line
+   the source asks for.
+3. Run `npm run packs` (media pipeline, then validator).
 
 ## Sourcing
 
@@ -23,10 +26,8 @@ copyright, but that is a per-image question, not a blanket rule — some NASA
 material is contributed by third parties or carries separate terms, and the
 agency's guidelines restrict using its identifiers in ways that imply
 endorsement. Check the source page for each file, record the credit line it
-asks for in `attribution`, and keep the original download alongside the
-generated WebP so the pipeline can be re-run.
+asks for in `attribution`, and keep the original in `source/` so the
+pipeline can be re-run.
 
-Expected filenames are listed in the `media` table of `pack.json`:
-`cover`, `sun`, `mercury`, `venus`, `earth`, `mars`, `asteroid-belt`,
-`jupiter`, `saturn`, `uranus`, `neptune`, `pluto` — each as
-`<name>.webp` plus `<name>.thumb.webp`.
+Expected base names: `cover`, `sun`, `mercury`, `venus`, `earth`, `mars`,
+`asteroid-belt`, `jupiter`, `saturn`, `uranus`, `neptune`, `pluto`.

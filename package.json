@@ -10,7 +10,10 @@
     "android": "expo run:android",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "media": "tsx scripts/media.ts",
+    "validate": "tsx scripts/validate-packs.ts",
+    "packs": "npm run media && npm run validate"
   },
   "dependencies": {
     "expo": "~57.0.27",
@@ -29,6 +32,9 @@
   "devDependencies": {
     "@types/node": "^22.20.2",
     "@types/react": "~19.2.4",
+    "ajv": "^8.20.0",
+    "sharp": "^0.35.5",
+    "tsx": "^4.23.15",
     "typescript": "~6.0.3",
     "vitest": "^5.0.0"
   },

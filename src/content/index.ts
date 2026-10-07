@@ -3,8 +3,10 @@
  *
  * Layer 1 of the architecture (Content/Data). Contains types and pure
  * functions only: no filesystem, no React Native, no Expo. `PackSource` and
- * its implementations arrive at Stage 2a; the JSON Schema in this folder is
- * consumed by the Stage 2a validator script.
+ * `BundledPackSource` take their registry by injection; the app passes the
+ * generated `bundled.generated.ts` (not exported here, so Node code never
+ * loads its Metro-only requires). The JSON Schema in this folder is
+ * consumed by scripts/validate-packs.ts.
  */
 
 export type {
@@ -21,6 +23,15 @@ export type {
   ScalingModel,
   SchemaVersion,
 } from "./types";
+
+export {
+  BundledPackSource,
+  PackNotFoundError,
+  summarize,
+  type BundledRegistry,
+  type MediaSource,
+  type PackSource,
+} from "./BundledPackSource";
 
 export {
   assertPackInvariants,

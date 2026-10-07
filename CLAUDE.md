@@ -62,4 +62,8 @@ Stage 4 GPS and Stage 5 notifications are the user's to start (need real walks).
 - **Stage 4 (MockProvider only)** done: `src/platform/` with
   DistanceProvider, MockProvider, JourneyController; temporary demo home
   screen; ADR 0007.
-- Next: Stage 2a → Stage 6 UI, then stop.
+- **Stage 2a** done: `npm run media` / `validate` / `packs`, placeholder
+  images, generated `src/content/bundled.generated.ts`, BundledPackSource;
+  ADR 0008. Solar-system images are PLACEHOLDERS (real ones needed before
+  release).
+- Next: Stage 6 UI driven by the mock provider, then stop.
