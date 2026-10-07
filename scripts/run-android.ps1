@@ -20,6 +20,14 @@ $env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"
 $env:ANDROID_HOME = "$env:LOCALAPPDATA\Android\Sdk"
 $env:Path = "$env:JAVA_HOME\bin;$env:ANDROID_HOME\platform-tools;$env:Path"
 
+# Route each connected device's localhost:8081 to this PC over USB, so the
+# app reaches the dev server without Wi-Fi or a firewall exception. In the
+# app's server list, choose http://localhost:8081.
+adb devices | Select-String "`tdevice$" | ForEach-Object {
+  $serial = ($_ -split "`t")[0]
+  adb -s $serial reverse tcp:8081 tcp:8081 | Out-Null
+}
+
 if ($Device) {
   npx expo run:android --device $Device
 } else {

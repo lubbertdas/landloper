@@ -1,14 +1,60 @@
-import { Stack } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
+// Stage 4 demo: a mock walk driving the real engine. Replaced at Stage 6.
 
+import { Stack } from "expo-router";
+import { useEffect } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+
+import type { AuthoredContentPack, ContentPack } from "../src/content";
+import { journeyController, setSimulationSpeed, useJourney } from "../src/ui/state/journey";
 import { theme } from "../src/ui/theme";
 
+// Media dimensions arrive with the Stage 2a pipeline; the demo uses text only.
+const pack = require("../packs/solar-system/pack.json") as AuthoredContentPack as ContentPack;
+
 export default function Home() {
+  const { current } = useJourney();
+
+  useEffect(
+    () =>
+      journeyController.onEvents((events) => {
+        for (const e of events) console.log("[journey]", JSON.stringify(e));
+      }),
+    [],
+  );
+
+  const status = current?.state.status;
+  const latest = pack.milestones.find((m) => m.id === current?.latestMilestoneId);
+
+  function startWalk() {
+    journeyController.end();
+    setSimulationSpeed(100);
+    journeyController.start(pack, 2000);
+  }
+
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: "Landloper" }} />
-      <Text style={styles.title}>Landloper</Text>
-      <Text style={styles.body}>Development build is running.</Text>
+      <Text style={styles.title}>Mock walk</Text>
+      <Text style={styles.body}>
+        2 km through the solar system, at 100× walking speed.
+      </Text>
+
+      {current && (
+        <View style={styles.card}>
+          <Text style={styles.big}>
+            {Math.round(current.state.cumulativeDistanceM)} m
+          </Text>
+          <Text style={styles.body}>Status: {status}</Text>
+          <Text style={styles.milestone}>{latest?.title ?? "—"}</Text>
+          {latest && <Text style={styles.body}>{latest.notification.body}</Text>}
+        </View>
+      )}
+
+      <Pressable style={styles.button} onPress={startWalk}>
+        <Text style={styles.buttonText}>
+          {current ? "Restart mock walk" : "Start mock walk"}
+        </Text>
+      </Pressable>
     </View>
   );
 }
@@ -19,16 +65,46 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: theme.spacing.lg,
+    gap: theme.spacing.md,
     backgroundColor: theme.colors.background,
   },
   title: {
     color: theme.colors.accent,
-    fontSize: theme.font.display,
+    fontSize: theme.font.heading,
     fontWeight: theme.weight.bold,
   },
   body: {
-    marginTop: theme.spacing.sm,
     color: theme.colors.textMuted,
     fontSize: theme.font.body,
+    textAlign: "center",
+  },
+  card: {
+    alignSelf: "stretch",
+    alignItems: "center",
+    gap: theme.spacing.sm,
+    padding: theme.spacing.lg,
+    borderRadius: theme.radius.md,
+    backgroundColor: theme.colors.surface,
+  },
+  big: {
+    color: theme.colors.text,
+    fontSize: theme.font.display,
+    fontWeight: theme.weight.bold,
+  },
+  milestone: {
+    color: theme.colors.accent,
+    fontSize: theme.font.title,
+    fontWeight: theme.weight.bold,
+  },
+  button: {
+    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.xl,
+    borderRadius: theme.radius.round,
+    backgroundColor: theme.colors.accent,
+  },
+  buttonText: {
+    color: theme.colors.accentText,
+    fontSize: theme.font.body,
+    fontWeight: theme.weight.bold,
   },
 });

@@ -57,5 +57,9 @@ Stage 4 GPS and Stage 5 notifications are the user's to start (need real walks).
 - **Stage 0.5b** done on the emulator: Expo SDK 57 at repo root, Expo
   Router, dev build installs and runs (ADR 0006). `android/` is generated
   and gitignored. Helper: `scripts/run-android.ps1`.
-  **Waiting on the user** to run it on their physical phone before Stage 4.
-- Next: Stage 4 MockProvider → Stage 2a → Stage 6 UI, then stop.
+  Runs on the user's Samsung S24 over USB (`adb reverse tcp:8081`; the
+  script does this). Wi-Fi/QR loading hung, likely Windows Firewall.
+- **Stage 4 (MockProvider only)** done: `src/platform/` with
+  DistanceProvider, MockProvider, JourneyController; temporary demo home
+  screen; ADR 0007.
+- Next: Stage 2a → Stage 6 UI, then stop.
