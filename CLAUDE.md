@@ -66,4 +66,10 @@ Stage 4 GPS and Stage 5 notifications are the user's to start (need real walks).
   images, generated `src/content/bundled.generated.ts`, BundledPackSource;
   ADR 0008. Solar-system images are PLACEHOLDERS (real ones needed before
   release).
-- Next: Stage 6 UI driven by the mock provider, then stop.
+- **Stage 6** done: all six screens on the mock provider (ADR 0009);
+  components in `src/ui/components/`, look-and-feel in `src/ui/theme.ts`.
+- **STOPPED here by agreement.** Stage 4 GPS and Stage 5 notifications are
+  the user's to start (they need real walks). After that: Stage 7
+  persistence (also replaces in-memory history/settings), 8, 9.
+- Known gaps: placeholder images; no persistence; dev-only speed control
+  on the live screen; app icon is Expo's placeholder.
