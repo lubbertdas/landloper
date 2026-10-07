@@ -50,5 +50,8 @@ Stage 4 GPS and Stage 5 notifications are the user's to start (need real walks).
 ## Current status
 
 - **Stage 0.5a** done: TypeScript + vitest toolchain, ADRs 0001–0002.
-- **Stage 1** in progress: content contract (`src/content/`), solar-system
-  pack (`packs/solar-system/`), ADRs 0003–0004.
+- **Stage 1** done: content contract (`src/content/`), solar-system pack
+  (`packs/solar-system/`), ADRs 0003–0004.
+- **Stage 3** done: journey engine (`src/engine/`), pure reducer with full
+  test suite; ADR 0005.
+- **Stage 0.5b** next: Expo project at repo root, dev build on emulator.
