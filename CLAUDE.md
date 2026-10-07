@@ -54,4 +54,8 @@ Stage 4 GPS and Stage 5 notifications are the user's to start (need real walks).
   (`packs/solar-system/`), ADRs 0003–0004.
 - **Stage 3** done: journey engine (`src/engine/`), pure reducer with full
   test suite; ADR 0005.
-- **Stage 0.5b** next: Expo project at repo root, dev build on emulator.
+- **Stage 0.5b** done on the emulator: Expo SDK 57 at repo root, Expo
+  Router, dev build installs and runs (ADR 0006). `android/` is generated
+  and gitignored. Helper: `scripts/run-android.ps1`.
+  **Waiting on the user** to run it on their physical phone before Stage 4.
+- Next: Stage 4 MockProvider → Stage 2a → Stage 6 UI, then stop.
