@@ -1,7 +1,8 @@
-// Settings (workplan Stage 6.6): display units and notification preference.
-// In memory until Stage 7.
+// Settings (workplan Stage 6.6): display units and notification preference,
+// plus the diagnostics log (ADR 0012) and, in development builds only, the
+// distance source. Preferences are in memory until Stage 7.
 
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import { StyleSheet, Switch, View } from "react-native";
 
 import { Card, Chip, Screen, Text } from "../src/ui/components";
@@ -9,7 +10,7 @@ import { updateSettings, useSettings } from "../src/ui/state/settings";
 import { theme } from "../src/ui/theme";
 
 export default function Settings() {
-  const { units, notificationsEnabled } = useSettings();
+  const { units, notificationsEnabled, devDistanceSource } = useSettings();
 
   return (
     <Screen>
@@ -39,11 +40,28 @@ export default function Settings() {
         </View>
       </Card>
 
-      <Card>
-        <Text variant="title">Distance source</Text>
-        <Text variant="muted">
-          Simulated walking (development build). GPS arrives in a later stage.
-        </Text>
+      {__DEV__ && (
+        <Card>
+          <Text variant="title">Distance source (development only)</Text>
+          <Text variant="caption">Used by the next journey you start.</Text>
+          <View style={styles.chips}>
+            <Chip
+              label="Simulated"
+              selected={devDistanceSource === "mock"}
+              onPress={() => updateSettings({ devDistanceSource: "mock" })}
+            />
+            <Chip
+              label="GPS"
+              selected={devDistanceSource === "gps"}
+              onPress={() => updateSettings({ devDistanceSource: "gps" })}
+            />
+          </View>
+        </Card>
+      )}
+
+      <Card onPress={() => router.push("/diagnostics")}>
+        <Text variant="title">Diagnostics</Text>
+        <Text variant="caption">What GPS and notifications did during your walks. Tap to open.</Text>
       </Card>
 
       <Text variant="caption">Settings reset when the app restarts, until saving arrives.</Text>

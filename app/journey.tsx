@@ -10,6 +10,7 @@ import {
   Button,
   Card,
   Chip,
+  GpsStatusLine,
   MediaImage,
   MilestoneRow,
   ProgressTrack,
@@ -22,6 +23,7 @@ import {
   getSimulationSpeed,
   journeyController,
   setSimulationSpeed,
+  useGpsStatus,
   useJourney,
 } from "../src/ui/state/journey";
 import { useSettings } from "../src/ui/state/settings";
@@ -37,6 +39,7 @@ export default function LiveJourney() {
   const { current } = useJourney();
   const { units } = useSettings();
   const [speed, setSpeed] = useState(getSimulationSpeed());
+  const gps = useGpsStatus();
 
   if (current === null) {
     return (
@@ -112,6 +115,9 @@ export default function LiveJourney() {
             ? "Journey complete"
             : `${Math.floor(progress * 100)}% of ${formatDistance(state.totalDistanceM, units)}`}
       </Text>
+      {!done && current.source === "gps" && (
+        <GpsStatusLine status={gps} paused={state.status === "paused"} />
+      )}
 
       {done && state.endedAt !== undefined && (
         <Card>
@@ -151,7 +157,7 @@ export default function LiveJourney() {
         </>
       )}
 
-      {!done && (
+      {!done && current.source === "mock" && (
         <View style={styles.dev}>
           <Text variant="caption">SIMULATED WALKING SPEED (DEVELOPMENT ONLY)</Text>
           <View style={styles.chips}>

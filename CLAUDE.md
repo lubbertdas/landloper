@@ -44,8 +44,8 @@ A fresh session must be able to resume from this file + `docs/adr/` alone.
 
 ## Build order (from the workplan)
 
-0.5a ✅ → 1 → 3 → 0.5b → 4 (MockProvider) → 2a → 6 → stop.
-Stage 4 GPS and Stage 5 notifications are the user's to start (need real walks).
+0.5a ✅ → 1 → 3 → 0.5b → 4 (MockProvider) → 2a → 6 → 4 GPS + 5 (together,
+by the user's choice) → user's real walks → 7 → 8 → 9.
 
 ## Current status
 
@@ -68,8 +68,22 @@ Stage 4 GPS and Stage 5 notifications are the user's to start (need real walks).
   release).
 - **Stage 6** done: all six screens on the mock provider (ADR 0009);
   components in `src/ui/components/`, look-and-feel in `src/ui/theme.ts`.
-- **STOPPED here by agreement.** Stage 4 GPS and Stage 5 notifications are
-  the user's to start (they need real walks). After that: Stage 7
-  persistence (also replaces in-memory history/settings), 8, 9.
-- Known gaps: placeholder images; no persistence; dev-only speed control
-  on the live screen; app icon is Expo's placeholder.
+- **Stage 4 GPS + Stage 5** built together (ADRs 0010–0012):
+  background location task owns the tick (load → advance → save in
+  SQLite), GPS filter, milestone notifications with deep links, Settings ›
+  Diagnostics log. Composition root and all native modules in
+  `src/runtime/`; root `index.ts` is the entry. Verified on the S24 with a
+  fake walk over USB (`npm run walk -- --phone --serial RFCX90H8DGH`),
+  screen off, including notification tap → detail.
+- **NEXT: the user's real walks**, on a release build
+  (`scripts\run-android.ps1 -Release`): a short one screen-on, then 30+
+  min locked. Then Stage 7 (history/settings tables in the same DB), 8, 9.
+- Build notes: after `app.json`/native-module changes use
+  `run-android.ps1 -Clean`. Physical device: if the dev client opens on a
+  192.168.x URL and hangs, reopen it with
+  `exp+landloper://expo-development-client/?url=http%3A%2F%2Flocalhost%3A8081`.
+  The API 30 emulator can't deliver fixes (old Play services).
+- Known gaps: placeholder images; history and settings still in memory;
+  dev-only speed control and distance-source switch; app icon and
+  foreground-service icon are placeholders; foreground-service text is a
+  first draft for the user to redesign.

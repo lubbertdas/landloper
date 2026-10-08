@@ -1,35 +1,14 @@
 /**
- * User preferences (workplan Stage 6, Settings). In memory until Stage 7
- * persists them.
+ * React access to user preferences. The store itself lives in
+ * `src/runtime/settings.ts` so the background path can read it too.
  */
 
 import { useSyncExternalStore } from "react";
 
-import type { DistanceUnits } from "../format";
+import { getSettings, subscribeSettings, type Settings } from "../../runtime/settings";
 
-export interface Settings {
-  units: DistanceUnits;
-  /** Milestone notifications. Stored now; acted on from Stage 5. */
-  notificationsEnabled: boolean;
-}
-
-let settings: Settings = { units: "km", notificationsEnabled: true };
-const listeners = new Set<() => void>();
-
-export function getSettings(): Settings {
-  return settings;
-}
-
-export function updateSettings(patch: Partial<Settings>): void {
-  settings = { ...settings, ...patch };
-  for (const listener of listeners) listener();
-}
-
-function subscribe(listener: () => void): () => void {
-  listeners.add(listener);
-  return () => listeners.delete(listener);
-}
+export { getSettings, updateSettings, type Settings } from "../../runtime/settings";
 
 export function useSettings(): Settings {
-  return useSyncExternalStore(subscribe, getSettings);
+  return useSyncExternalStore(subscribeSettings, getSettings);
 }

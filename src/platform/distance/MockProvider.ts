@@ -36,12 +36,18 @@ export interface MockProviderOptions {
   /** Real milliseconds between distance updates. */
   tickMs?: number;
   clock?: Clock;
+  /**
+   * Metres already walked when this provider takes over, e.g. a journey
+   * restored after an app restart. Emitted distances start from here.
+   */
+  startAtM?: number;
 }
 
 export class MockProvider implements DistanceProvider {
   private readonly curve: DistanceCurve;
   private readonly tickMs: number;
   private readonly clock: Clock;
+  private readonly startAtM: number;
   private timeScale: number;
 
   private listeners = new Set<DistanceListener>();
@@ -56,6 +62,7 @@ export class MockProvider implements DistanceProvider {
     this.timeScale = options.timeScale ?? 1;
     this.tickMs = options.tickMs ?? 250;
     this.clock = options.clock ?? realClock;
+    this.startAtM = options.startAtM ?? 0;
   }
 
   start(): void {
@@ -107,7 +114,7 @@ export class MockProvider implements DistanceProvider {
   private tick(): void {
     this.simSeconds += (this.tickMs / 1000) * this.timeScale;
     // The contract is monotonic, whatever shape the curve has.
-    const metres = Math.max(this.lastEmitted, this.curve(this.simSeconds));
+    const metres = Math.max(this.lastEmitted, this.startAtM + this.curve(this.simSeconds));
     this.lastEmitted = metres;
     for (const listener of this.listeners) listener(metres);
   }

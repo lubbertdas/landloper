@@ -2,7 +2,13 @@ import { describe, expect, it } from "vitest";
 
 import type { ContentPack } from "../content";
 import type { JourneyEvent } from "../engine";
-import { JourneyController, MockProvider, steadyWalk, type Clock } from "./index";
+import {
+  JourneyController,
+  MemoryJourneyStore,
+  MockProvider,
+  steadyWalk,
+  type Clock,
+} from "./index";
 
 /** A manual clock: `advance(ms)` fires every due interval tick. */
 class FakeClock implements Clock {
@@ -146,7 +152,10 @@ describe("JourneyController with MockProvider", () => {
   function setup() {
     const clock = new FakeClock();
     let provider: MockProvider | null = null;
+    const store = new MemoryJourneyStore();
     const controller = new JourneyController({
+      store,
+      getPack: (id) => (id === PACK.id ? PACK : undefined),
       createProvider: () => {
         // 10 m per 1 s tick.
         provider = new MockProvider({ curve: steadyWalk(10), tickMs: 1000, clock });
@@ -157,12 +166,12 @@ describe("JourneyController with MockProvider", () => {
     });
     const events: JourneyEvent[] = [];
     controller.onEvents((batch) => events.push(...batch));
-    return { clock, controller, events, provider: () => provider };
+    return { clock, controller, events, store, provider: () => provider };
   }
 
   it("drives the real engine from mock distance to completion", () => {
     const { clock, controller, events } = setup();
-    controller.start(PACK, 100);
+    controller.start(PACK, 100, "mock");
     clock.advance(100_000);
 
     const reached = events.flatMap((e) => (e.type === "MilestoneReached" ? [e.milestoneId] : []));
@@ -178,7 +187,7 @@ describe("JourneyController with MockProvider", () => {
 
   it("pauses both the engine and the provider", () => {
     const { clock, controller } = setup();
-    controller.start(PACK, 100);
+    controller.start(PACK, 100, "mock");
     clock.advance(3000);
     controller.pause();
     clock.advance(10_000);
@@ -190,15 +199,15 @@ describe("JourneyController with MockProvider", () => {
 
   it("refuses a second journey while one is in progress", () => {
     const { controller } = setup();
-    controller.start(PACK, 100);
-    expect(() => controller.start(PACK, 100)).toThrow(/already in progress/);
+    controller.start(PACK, 100, "mock");
+    expect(() => controller.start(PACK, 100, "mock")).toThrow(/already in progress/);
     controller.pause();
-    expect(() => controller.start(PACK, 100)).toThrow(/already in progress/);
+    expect(() => controller.start(PACK, 100, "mock")).toThrow(/already in progress/);
   });
 
   it("discards an abandoned journey without recording history", () => {
     const { clock, controller } = setup();
-    controller.start(PACK, 100);
+    controller.start(PACK, 100, "mock");
     clock.advance(2000);
     controller.end();
     expect(controller.getSnapshot()).toEqual({ current: null, history: [] });
@@ -209,7 +218,7 @@ describe("JourneyController with MockProvider", () => {
     const { clock, controller } = setup();
     const snaps = new Set<unknown>();
     controller.subscribe(() => snaps.add(controller.getSnapshot()));
-    controller.start(PACK, 100);
+    controller.start(PACK, 100, "mock");
     clock.advance(2000);
     expect(snaps.size).toBe(3);
   });

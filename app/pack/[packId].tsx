@@ -1,19 +1,30 @@
 // Setup flow (workplan Stage 6.2): pick a pack → see suggested distances →
-// choose the journey distance → start. No scaling-model or distance-source
-// choice: both are decided by the app. The permissions step arrives with GPS.
+// choose the journey distance → grant permissions → start. No scaling-model
+// or distance-source choice: both are decided by the app (ADR 0011).
 
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { ActivityIndicator, StyleSheet, TextInput, View } from "react-native";
+import { ActivityIndicator, Keyboard, Linking, StyleSheet, TextInput, View } from "react-native";
 
 import { Button, Card, Chip, MediaImage, Screen, Text } from "../../src/ui/components";
 import { formatDistance, formatDistanceShort, parseDistance } from "../../src/ui/format";
+import { requestLocationPermissions, type LocationPermission } from "../../src/runtime/location";
+import { requestNotificationPermission } from "../../src/runtime/notifications";
+import { distanceSourceForNewJourney } from "../../src/runtime/settings";
 import { journeyController, useJourney } from "../../src/ui/state/journey";
 import { usePack } from "../../src/ui/state/packs";
-import { useSettings } from "../../src/ui/state/settings";
+import { getSettings, useSettings } from "../../src/ui/state/settings";
 import { theme } from "../../src/ui/theme";
 
 const CUSTOM = -1;
+
+// What to tell the user when a permission step fails.
+const PERMISSION_HELP: Record<Exclude<LocationPermission, { granted: true }>["step"], string> = {
+  services: "Location is turned off on this phone. Turn it on, then start again.",
+  foreground: "Landloper needs your location to measure how far you walk.",
+  background:
+    "To keep counting while your phone is locked, set Landloper's location permission to “Allow all the time”.",
+};
 
 export default function PackSetup() {
   const { packId } = useLocalSearchParams<{ packId: string }>();
@@ -22,6 +33,8 @@ export default function PackSetup() {
   const { units } = useSettings();
   const [selected, setSelected] = useState<number | null>(null);
   const [custom, setCustom] = useState("");
+  const [starting, setStarting] = useState(false);
+  const [problem, setProblem] = useState<string | null>(null);
 
   if (pack === null) return <ActivityIndicator style={styles.loading} color={theme.colors.accent} />;
   if (pack === undefined) {
@@ -37,11 +50,29 @@ export default function PackSetup() {
   const busy =
     current !== null && (current.state.status === "active" || current.state.status === "paused");
   const cover = pack.media.find((a) => a.ref === pack.coverImage);
+  const source = distanceSourceForNewJourney();
 
-  function start() {
+  async function start() {
     if (distanceM === null || pack == null) return;
-    journeyController.start(pack, distanceM);
-    router.replace("/journey");
+    Keyboard.dismiss();
+    setProblem(null);
+    setStarting(true);
+    try {
+      if (source === "gps") {
+        const permission = await requestLocationPermissions();
+        if (!permission.granted) {
+          setProblem(PERMISSION_HELP[permission.step]);
+          return;
+        }
+      }
+      if (getSettings().notificationsEnabled) await requestNotificationPermission();
+      journeyController.start(pack, distanceM, source);
+      router.replace("/journey");
+    } catch (error) {
+      setProblem(`Could not start: ${String(error)}`);
+    } finally {
+      setStarting(false);
+    }
   }
 
   return (
@@ -56,9 +87,15 @@ export default function PackSetup() {
           </>
         ) : (
           <Button
-            label={distanceM === null ? "Choose a distance" : `Start · ${formatDistance(distanceM, units)}`}
+            label={
+              starting
+                ? "Starting…"
+                : distanceM === null
+                  ? "Choose a distance"
+                  : `Start · ${formatDistance(distanceM, units)}`
+            }
             onPress={start}
-            disabled={distanceM === null}
+            disabled={distanceM === null || starting}
           />
         )
       }
@@ -103,6 +140,26 @@ export default function PackSetup() {
           />
           <Text variant="title">{units}</Text>
         </View>
+      )}
+
+      {source === "gps" ? (
+        <Card>
+          <Text variant="title">Your location</Text>
+          <Text variant="muted">
+            Landloper measures your walk with GPS, also while your phone is locked. Android asks
+            twice: first allow location, then choose “Allow all the time”.
+          </Text>
+        </Card>
+      ) : (
+        <Text variant="caption">Simulated walking (development build). Change it in Settings.</Text>
+      )}
+
+      {problem !== null && (
+        <Card>
+          <Text variant="accent">Not started</Text>
+          <Text variant="body">{problem}</Text>
+          <Button label="Open phone settings" variant="secondary" onPress={() => Linking.openSettings()} />
+        </Card>
       )}
     </Screen>
   );

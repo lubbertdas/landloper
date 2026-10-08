@@ -1,35 +1,20 @@
 /**
- * The app's single JourneyController, plus React hooks to observe it.
- *
- * Distance comes from MockProvider until Stage 4 (GPS). `simulationSpeed`
- * is how many times faster than real walking the mock runs.
+ * React access to the app's single JourneyController and the GPS status.
+ * The controller itself lives in `src/runtime/services.ts` (ADR 0010), so
+ * the background task drives the same instance with no screen mounted.
  */
 
 import { useSyncExternalStore } from "react";
 
-import {
-  JourneyController,
-  MockProvider,
-  type JourneySnapshot,
-} from "../../platform";
+import type { GpsStatus, JourneySnapshot } from "../../platform";
+import { gpsHub, journeyController } from "../../runtime/services";
 
-let simulationSpeed = 20;
-
-export const journeyController = new JourneyController({
-  createProvider: () => new MockProvider({ timeScale: simulationSpeed }),
-});
+export { getSimulationSpeed, journeyController, setSimulationSpeed } from "../../runtime/services";
 
 export function useJourney(): JourneySnapshot {
   return useSyncExternalStore(journeyController.subscribe, journeyController.getSnapshot);
 }
 
-export function getSimulationSpeed(): number {
-  return simulationSpeed;
-}
-
-/** Applies to the running mock walk immediately, and to later ones. */
-export function setSimulationSpeed(speed: number): void {
-  simulationSpeed = speed;
-  const provider = journeyController.getProvider();
-  if (provider instanceof MockProvider) provider.setTimeScale(speed);
+export function useGpsStatus(): GpsStatus {
+  return useSyncExternalStore(gpsHub.subscribeStatus, gpsHub.getStatus);
 }

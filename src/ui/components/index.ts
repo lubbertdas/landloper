@@ -6,6 +6,7 @@
 export { Button } from "./Button";
 export { Card } from "./Card";
 export { Chip } from "./Chip";
+export { GpsStatusLine } from "./GpsStatusLine";
 export { MediaImage } from "./MediaImage";
 export { MilestoneRow } from "./MilestoneRow";
 export { PackTile } from "./PackTile";

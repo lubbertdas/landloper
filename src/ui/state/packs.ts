@@ -1,6 +1,7 @@
 /**
- * The app's PackSource. Bundled packs only in v1 (workplan Stage 2a);
- * Stage 2b swaps in a RemotePackSource here and nothing else changes.
+ * React access to the app's PackSource, which lives in
+ * `src/runtime/services.ts`. Bundled packs only in v1 (workplan Stage 2a);
+ * Stage 2b swaps in a RemotePackSource there and nothing else changes.
  *
  * The hooks use the async PackSource API even though bundled packs load
  * instantly, so screens already handle a source that has to wait.
@@ -8,10 +9,10 @@
 
 import { useEffect, useState } from "react";
 
-import { BundledPackSource, type ContentPack } from "../../content";
-import { bundledRegistry } from "../../content/bundled.generated";
+import type { ContentPack } from "../../content";
+import { packSource } from "../../runtime/services";
 
-export const packSource = new BundledPackSource(bundledRegistry);
+export { packSource } from "../../runtime/services";
 
 /** Every available pack, fully loaded, in browser order. `null` while loading. */
 export function usePacks(): ContentPack[] | null {
